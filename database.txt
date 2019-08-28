@@ -11,13 +11,15 @@ create table bebida(
 create table sabor(
 	id serial primary key,
 	nome varchar(100),
-	ingredientes varchar(100)
+	ingredientes varchar(100),
+	excluido boolean
 );
 
 create table pizza(
 	id serial primary key,
 	tamanho varchar(100),
-	preco decimal(10,2)
+	preco decimal(10,2),
+	excluido boolean
 );
 
 create table pessoa_fisica(

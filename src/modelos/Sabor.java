@@ -6,7 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,12 +29,28 @@ public class Sabor {
     public static boolean cadastra(Sabor sabor) {
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
-        String stm = "INSERT INTO sabor (nome,ingredientes) VALUES (?,?)";
+        String stm = "INSERT INTO sabor (nome,ingredientes,excluido) VALUES (?,?,?)";
 
         try {
             pst = conn.prepareStatement(stm);
             pst.setString(1, sabor.getNome());
             pst.setString(2, sabor.getIngredientes());
+            pst.setBoolean(3, false);
+            pst.execute();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }        
+    }
+    
+    public boolean remover(Sabor sabor) {
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        String stm = "UPDATE sabor set excluido = true where id = "+sabor.getId();
+
+        try {
+            pst = conn.prepareStatement(stm);            
             pst.execute();
             return true;
         } catch (SQLException ex) {
@@ -50,7 +65,7 @@ public class Sabor {
         Connection conn = Conexao.Connect();
         Sabor sabor = new Sabor();
         ArrayList<Sabor> lista = new ArrayList<Sabor>();
-        String stm = "select * from sabor";        
+        String stm = "select * from sabor where excluido = false";        
        
         try {
             pst = conn.prepareStatement(stm);
@@ -111,5 +126,7 @@ public class Sabor {
     public void setIngredientes(String ingredientes) {
         this.ingredientes = ingredientes;
     }
+
+    
 
 }

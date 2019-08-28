@@ -19,18 +19,18 @@ import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import modelos.Bebida;
+import modelos.Sabor;
 
 /**
  *
  * @author Danil
  */
-public class RemoverBebida extends javax.swing.JFrame {
+public class RemoverSabor extends javax.swing.JFrame {
 
     /**
-     * Creates new form RemoverBebida
+     * Creates new form RemoverSabor
      */
-    public RemoverBebida() throws SQLException {
+    public RemoverSabor() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
         preencheTabela();
@@ -44,31 +44,31 @@ public class RemoverBebida extends javax.swing.JFrame {
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
     }
-
-    public boolean fechar() {
+    
+     public boolean fechar() {
         this.dispose();
         return true;
     }
 
-    private void preencheTabela() throws SQLException {
-        ArrayList<Bebida> lista = new ArrayList<Bebida>();
-        lista = Bebida.buscaBebidas();
+private void preencheTabela() throws SQLException {
+        ArrayList<Sabor> lista = new ArrayList<Sabor>();
+        lista = Sabor.buscaSabores();
 
-        ((DefaultTableCellRenderer) tabelaBebida.getTableHeader().getDefaultRenderer())
+        ((DefaultTableCellRenderer) tabelaSabor.getTableHeader().getDefaultRenderer())
                 .setHorizontalAlignment(JLabel.CENTER);
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        tabelaBebida.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-        tabelaBebida.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-        tabelaBebida.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
-        DefaultTableModel model = (DefaultTableModel) tabelaBebida.getModel();
+        tabelaSabor.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        tabelaSabor.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        tabelaSabor.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
+        DefaultTableModel model = (DefaultTableModel) tabelaSabor.getModel();
 
         for (int i = 0; i < lista.size(); i++) {
-            model.addRow(new Object[]{lista.get(i).getId(), lista.get(i).getNome(), lista.get(i).getPreco()});
+            model.addRow(new Object[]{lista.get(i).getId(), lista.get(i).getNome(), lista.get(i).getIngredientes()});
         }
 
-        labelBebidas.setText(String.valueOf(lista.size()));
+        labelSabor.setText(String.valueOf(lista.size()));
 
     }
 
@@ -81,22 +81,25 @@ public class RemoverBebida extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabelaBebida = new javax.swing.JTable();
+        tabelaSabor = new javax.swing.JTable();
         buttonSair = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        labelBebidas = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        labelSabor = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Remover Bebida");
+        setTitle("Remover Sabor");
 
-        tabelaBebida.setModel(new javax.swing.table.DefaultTableModel(
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        jLabel1.setText("Remover Sabor");
+
+        tabelaSabor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Nome", "Preço R$"
+                "ID", "Nome", "Ingredientes"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -107,7 +110,7 @@ public class RemoverBebida extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tabelaBebida);
+        jScrollPane1.setViewportView(tabelaSabor);
 
         buttonSair.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         buttonSair.setText("Remover");
@@ -117,45 +120,42 @@ public class RemoverBebida extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("Bebidas Cadastradas:");
+        jLabel2.setText("Sabores Cadastrados:");
 
-        labelBebidas.setText("00");
-
-        jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        jLabel1.setText("Remover Bebida");
+        labelSabor.setText("00");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(248, 248, 248)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(226, 226, 226)
+                        .addComponent(buttonSair))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 627, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(labelBebidas)))
+                        .addComponent(labelSabor)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(290, 290, 290))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(buttonSair)
-                .addGap(326, 326, 326))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(15, 15, 15)
+                .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(labelBebidas))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(labelSabor))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(buttonSair)
@@ -167,26 +167,26 @@ public class RemoverBebida extends javax.swing.JFrame {
 
     private void buttonSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSairActionPerformed
         int column = 0;
-        int row = tabelaBebida.getSelectedRow();
-        Bebida bebida = new Bebida();
-        bebida.setId(Integer.parseInt(tabelaBebida.getModel().getValueAt(row, 0).toString()));
-        bebida.setNome(tabelaBebida.getModel().getValueAt(row, 1).toString());
-        bebida.setPreco(Double.parseDouble(tabelaBebida.getModel().getValueAt(row, 2).toString()));
+        int row = tabelaSabor.getSelectedRow();
+        Sabor sabor = new Sabor();
+        sabor.setId(Integer.parseInt(tabelaSabor.getModel().getValueAt(row, 0).toString()));
+        sabor.setNome(tabelaSabor.getModel().getValueAt(row, 1).toString());
+        sabor.setIngredientes(tabelaSabor.getModel().getValueAt(row, 2).toString());
 
-        if (JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover a bebida: " + bebida.getNome(), "Aviso",
-                JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-            if (bebida.remover(bebida)) {
-                try {
-                    DefaultTableModel model = (DefaultTableModel) tabelaBebida.getModel();
-                    model.setRowCount(0);
-                    preencheTabela();
-                    JOptionPane.showMessageDialog(null, "Bebida removida com sucesso!");
-                } catch (SQLException ex) {
-                    Logger.getLogger(RemoverBebida.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Houve um problema!");
+        if (JOptionPane.showConfirmDialog(null, "Tem certeza que deseja remover o sabor: " + sabor.getNome(), "Aviso",
+            JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+        if (sabor.remover(sabor)) {
+            try {
+                DefaultTableModel model = (DefaultTableModel) tabelaSabor.getModel();
+                model.setRowCount(0);
+                preencheTabela();
+                JOptionPane.showMessageDialog(null, "Sabor removido com sucesso!");
+            } catch (SQLException ex) {
+                Logger.getLogger(RemoverBebida.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Houve um problema!");
+        }
         }
     }//GEN-LAST:event_buttonSairActionPerformed
 
@@ -207,13 +207,13 @@ public class RemoverBebida extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(RemoverBebida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RemoverSabor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(RemoverBebida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RemoverSabor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(RemoverBebida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RemoverSabor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(RemoverBebida.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RemoverSabor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -221,9 +221,9 @@ public class RemoverBebida extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new RemoverBebida().setVisible(true);
+                    new RemoverSabor().setVisible(true);
                 } catch (SQLException ex) {
-                    Logger.getLogger(RemoverBebida.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(RemoverSabor.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         });
@@ -234,7 +234,7 @@ public class RemoverBebida extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel labelBebidas;
-    private javax.swing.JTable tabelaBebida;
+    private javax.swing.JLabel labelSabor;
+    private javax.swing.JTable tabelaSabor;
     // End of variables declaration//GEN-END:variables
 }

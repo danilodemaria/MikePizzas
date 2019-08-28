@@ -29,18 +29,34 @@ public class Pizza {
 
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
-        String stm = "INSERT INTO pizza (tamanho,preco) VALUES (?,?)";
+        String stm = "INSERT INTO pizza (tamanho,preco,excluido) VALUES (?,?,?)";
 
         try {
             pst = conn.prepareStatement(stm);
             pst.setString(1, pizza.getTamanho());
             pst.setDouble(2, pizza.getPreco());
+            pst.setBoolean(3, false);
             pst.execute();
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+    }
+    
+     public boolean remover(Pizza pizza) {
+         PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        String stm = "UPDATE pizza set excluido = true where id = "+pizza.getId();
+
+        try {
+            pst = conn.prepareStatement(stm);            
+            pst.execute();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } 
     }
 
     public static ArrayList<Pizza> buscaPizzas() throws SQLException {
@@ -49,7 +65,7 @@ public class Pizza {
         Connection conn = Conexao.Connect();
         Pizza pizza = new Pizza();
         ArrayList<Pizza> lista = new ArrayList<Pizza>();
-        String stm = "select * from pizza";
+        String stm = "select * from pizza where excluido = false";
 
         try {
             pst = conn.prepareStatement(stm);
@@ -111,5 +127,7 @@ public class Pizza {
     public void setPreco(double preco) {
         this.preco = preco;
     }
+
+   
 
 }
