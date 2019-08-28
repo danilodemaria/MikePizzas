@@ -4,7 +4,8 @@ create database db_pizzaria with owner pizza;
 create table bebida(
 	id serial primary key,
 	nome varchar(100),
-	preco decimal(10,2)
+	preco decimal(10,2),
+	excluido boolean
 );
 
 create table sabor(

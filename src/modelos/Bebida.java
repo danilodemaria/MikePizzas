@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Bebida {  
+
         
     private int id;
     private String nome;
@@ -29,12 +30,28 @@ public class Bebida {
         
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
-        String stm = "INSERT INTO bebida (nome,preco) VALUES (?,?)";
+        String stm = "INSERT INTO bebida (nome,preco,excluido) VALUES (?,?,?)";
 
         try {
             pst = conn.prepareStatement(stm);
             pst.setString(1, nova.getNome());
             pst.setDouble(2, nova.getPreco());
+            pst.setBoolean(3, false);
+            pst.execute();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }        
+    }
+    
+    public static boolean remover(Bebida bebida){
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        String stm = "UPDATE bebida set excluido = true where id = "+bebida.getId();
+
+        try {
+            pst = conn.prepareStatement(stm);            
             pst.execute();
             return true;
         } catch (SQLException ex) {
@@ -50,7 +67,7 @@ public class Bebida {
         Connection conn = Conexao.Connect();
         Bebida bebida = new Bebida();
         ArrayList<Bebida> lista = new ArrayList<Bebida>();
-        String stm = "select * from bebida";        
+        String stm = "select * from bebida where excluido = false";        
        
         try {
             pst = conn.prepareStatement(stm);
