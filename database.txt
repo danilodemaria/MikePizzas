@@ -1,0 +1,38 @@
+create user pizza with password '1234';
+create database db_pizzaria with owner pizza;
+
+create table bebida(
+	id serial primary key,
+	nome varchar(100),
+	preco decimal(10,2)
+);
+
+create table sabor(
+	id serial primary key,
+	nome varchar(100),
+	ingredientes varchar(100)
+);
+
+create table pizza(
+	id serial primary key,
+	tamanho varchar(100),
+	preco decimal(10,2)
+);
+
+create table pessoa_fisica(
+	id serial primary key,
+	nome varchar(100),
+	telefone varchar(100),
+	endereco varchar(150),
+	rg varchar(20),
+	cpf varchar(20)
+);
+
+create table pessoa_juridica(
+	id serial primary key,
+	nome varchar(100),
+	telefone varchar(100),
+	endereco varchar(150),
+	cnpj varchar(20),
+	inscricao varchar(20)
+);
