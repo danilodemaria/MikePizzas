@@ -20,27 +20,25 @@ import java.util.logging.Logger;
  */
 public class Fisica extends Cliente {
 
-    
-
     private String cpf;
     private String rg;
-    
-    public Fisica(){
-        
+
+    public Fisica() {
+
     }
-    
-    public Fisica (int id, String nome, String cpf, String rg, String endereco){
+
+    public Fisica(int id, String nome, String cpf, String rg, String endereco) {
         this.cpf = cpf;
         this.rg = rg;
         this.nome = nome;
-        this.id  = id;
+        this.id = id;
         this.endereco = endereco;
     }
-    
+
     public boolean Cadastra(Fisica pessoa) {
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
-        String stm = "INSERT INTO pessoa_fisica (nome,endereco,telefone,rg,cpf) VALUES (?,?,?,?,?)";
+        String stm = "INSERT INTO pessoa_fisica (nome,endereco,telefone,rg,cpf,excluido) VALUES (?,?,?,?,?,?)";
 
         try {
             pst = conn.prepareStatement(stm);
@@ -48,22 +46,23 @@ public class Fisica extends Cliente {
             pst.setString(2, pessoa.getEndereco());
             pst.setString(3, pessoa.getTelefone());
             pst.setString(4, pessoa.getRg());
-            pst.setString(5, pessoa.getCpf());         
+            pst.setString(5, pessoa.getCpf());
+            pst.setBoolean(6, false);
             pst.execute();
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        }    
+        }
     }
-    
+
     public static ArrayList<Fisica> buscaFisico() throws SQLException {
         ResultSet rs = null;
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
         Fisica fisica = new Fisica();
         ArrayList<Fisica> lista = new ArrayList<Fisica>();
-        String stm = "select * from pessoa_fisica";
+        String stm = "select * from pessoa_fisica where excluido = false";
 
         try {
             pst = conn.prepareStatement(stm);
@@ -84,6 +83,21 @@ public class Fisica extends Cliente {
         }
 
         return lista;
+    }
+
+    public static boolean remover(Fisica pessoa) {
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        String stm = "UPDATE pessoa_fisica set excluido = true where id = " + pessoa.getId();
+
+        try {
+            pst = conn.prepareStatement(stm);
+            pst.execute();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
     /**
@@ -114,5 +128,4 @@ public class Fisica extends Cliente {
         this.rg = rg;
     }
 
-    
 }

@@ -28,7 +28,8 @@ create table pessoa_fisica(
 	telefone varchar(100),
 	endereco varchar(150),
 	rg varchar(20),
-	cpf varchar(20)
+	cpf varchar(20),
+	excluido boolean
 );
 
 create table pessoa_juridica(
@@ -37,5 +38,6 @@ create table pessoa_juridica(
 	telefone varchar(100),
 	endereco varchar(150),
 	cnpj varchar(20),
-	inscricao varchar(20)
+	inscricao varchar(20),
+	excluido boolean
 );

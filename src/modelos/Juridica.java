@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 public class Juridica extends Cliente {
 
-
     private String cnpj;
     private String inscricaoEstadual;
 
@@ -30,8 +29,7 @@ public class Juridica extends Cliente {
     public boolean Cadastra(Juridica pessoa) {
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
-        String stm = "INSERT INTO pessoa_juridica (nome,endereco,telefone,cnpj,inscricao) VALUES (?,?,?,?,?)";
-        System.out.println("to aqui");
+        String stm = "INSERT INTO pessoa_juridica (nome,endereco,telefone,cnpj,inscricao, excluido) VALUES (?,?,?,?,?,?)";
         try {
             pst = conn.prepareStatement(stm);
             pst.setString(1, pessoa.getNome());
@@ -39,6 +37,7 @@ public class Juridica extends Cliente {
             pst.setString(3, pessoa.getTelefone());
             pst.setString(4, pessoa.getCnpj());
             pst.setString(5, pessoa.getInscricaoEstadual());
+            pst.setBoolean(6, false);
             pst.execute();
             return true;
         } catch (SQLException ex) {
@@ -53,7 +52,7 @@ public class Juridica extends Cliente {
         Connection conn = Conexao.Connect();
         Juridica juridica = new Juridica();
         ArrayList<Juridica> lista = new ArrayList<Juridica>();
-        String stm = "select * from pessoa_juridica";
+        String stm = "select * from pessoa_juridica where excluido = false";
 
         try {
             pst = conn.prepareStatement(stm);
@@ -74,6 +73,21 @@ public class Juridica extends Cliente {
         }
 
         return lista;
+    }
+
+    public boolean remover(Juridica pessoa) {
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        String stm = "UPDATE pessoa_juridica set excluido = true where id = " + pessoa.getId();
+
+        try {
+            pst = conn.prepareStatement(stm);
+            pst.execute();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
     /**
