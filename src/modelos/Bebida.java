@@ -87,6 +87,11 @@ public class Bebida {
         return lista;
     }
 
+    public Bebida(int id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
     /**
      * @return the id
      */
