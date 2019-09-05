@@ -41,3 +41,39 @@ create table pessoa_juridica(
 	inscricao varchar(20),
 	excluido boolean
 );
+
+create table pedido(
+	id serial primary key,
+	id_cliente integer,
+	valor decimal(10,2),
+	juridico boolean
+);
+
+create table pedido_pizza(
+	id serial primary key,
+	id_pedido integer,
+	id_pizza integer
+);
+
+create table pedido_bebida(
+	id serial primary key,
+	id_pedido integer,
+	id_bebida integer
+);
+
+create table pedido_sabor(
+	id serial primary key,
+	id_pizza integer,
+	id_sabor integer
+);
+
+
+ALTER TABLE pedido ADD FOREIGN KEY (id_cliente) REFERENCES pessoa_fisica(id);
+ALTER TABLE pedido ADD FOREIGN KEY (id_cliente) REFERENCES pessoa_juridica(id);
+ALTER TABLE pedido_pizza ADD FOREIGN KEY (id_pedido) REFERENCES pedido(id);
+ALTER TABLE pedido_pizza ADD FOREIGN KEY (id_pizza) REFERENCES pizza(id);
+ALTER TABLE pedido_bebida ADD FOREIGN KEY (id_pedido) REFERENCES pedido(id);
+ALTER TABLE pedido_bebida ADD FOREIGN KEY (id_bebida) REFERENCES bebida(id);
+ALTER TABLE pedido_sabor ADD FOREIGN KEY (id_pizza) REFERENCES pizza(id);
+ALTER TABLE pedido_sabor ADD FOREIGN KEY (id_sabor) REFERENCES sabor(id);
+

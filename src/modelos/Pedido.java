@@ -1,27 +1,30 @@
 package modelos;
 
+import database.Conexao;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class Pedido {
-    
+
     private int id;
-    private int id_pizza;
-    private int id_cliente;
-    private int id_bebida;
-    private int quantidade;
+    private boolean juridico;
     private double valor;
 
-    public Pedido(){
-        
+    public Pedido() {
+
     }
-    
-    public Pedido(int id, int id_pizza, int id_cliente, int id_bebida,int quantidade,double valor){
+
+    public Pedido(int id, boolean juridico, double valor) {
         this.id = id;
-        this.id_pizza = id_pizza;
-        this.id_cliente = id_cliente;
-        this.id_bebida = id_bebida;
-        this.quantidade = quantidade;
+        this.juridico = juridico;
         this.valor = valor;
     }
-    
+
     /**
      * @return the id
      */
@@ -34,62 +37,6 @@ public class Pedido {
      */
     public void setId(int id) {
         this.id = id;
-    }
-
-    /**
-     * @return the id_pizza
-     */
-    public int getId_pizza() {
-        return id_pizza;
-    }
-
-    /**
-     * @param id_pizza the id_pizza to set
-     */
-    public void setId_pizza(int id_pizza) {
-        this.id_pizza = id_pizza;
-    }
-
-    /**
-     * @return the id_cliente
-     */
-    public int getId_cliente() {
-        return id_cliente;
-    }
-
-    /**
-     * @param id_cliente the id_cliente to set
-     */
-    public void setId_cliente(int id_cliente) {
-        this.id_cliente = id_cliente;
-    }
-
-    /**
-     * @return the id_bebida
-     */
-    public int getId_bebida() {
-        return id_bebida;
-    }
-
-    /**
-     * @param id_bebida the id_bebida to set
-     */
-    public void setId_bebida(int id_bebida) {
-        this.id_bebida = id_bebida;
-    }
-
-    /**
-     * @return the quantidade
-     */
-    public int getQuantidade() {
-        return quantidade;
-    }
-
-    /**
-     * @param quantidade the quantidade to set
-     */
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
     }
 
     /**
@@ -106,5 +53,40 @@ public class Pedido {
         this.valor = valor;
     }
 
-    
+    /**
+     * @return the juridico
+     */
+    public boolean isJuridico() {
+        return juridico;
+    }
+
+    /**
+     * @param juridico the juridico to set
+     */
+    public void setJuridico(boolean juridico) {
+        this.juridico = juridico;
+    }
+
+    public int buscaIdPedido() throws SQLException {
+        ResultSet rs = null;
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        String stm = "select id from pedido order by id desc limit 1";
+        int aux = 0;
+        try {
+            pst = conn.prepareStatement(stm);
+            rs = pst.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        while (rs.next()) {
+            aux = rs.getInt("id");
+        }
+
+        aux = aux + 1;
+        return aux;
+
+    }
+
 }

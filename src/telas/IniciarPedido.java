@@ -29,11 +29,13 @@ public class IniciarPedido extends javax.swing.JFrame {
     public ArrayList<Juridica> listaJuridica = new ArrayList<>();
     public Pedido pedido = new Pedido();
     public double total = 0;
-
+    public int numPedidoAtual = 0;
+    
     public IniciarPedido() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
         preencheComboBox();
+        buscaNumPedido();
         KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
         Action escapeAction = new AbstractAction() {
             @Override
@@ -107,6 +109,8 @@ public class IniciarPedido extends javax.swing.JFrame {
         buttoAdicionarSabor = new javax.swing.JButton();
         buttoAdicionarTam = new javax.swing.JButton();
         buttonAdicionarBebida = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        numPedido = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Realizar Pedido");
@@ -228,6 +232,12 @@ public class IniciarPedido extends javax.swing.JFrame {
             }
         });
 
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel9.setText("Nº");
+
+        numPedido.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        numPedido.setText("00");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -244,7 +254,11 @@ public class IniciarPedido extends javax.swing.JFrame {
                                 .addComponent(buttonSalva))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel9)
+                                .addGap(18, 18, 18)
+                                .addComponent(numPedido)
+                                .addGap(55, 55, 55))))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -294,11 +308,19 @@ public class IniciarPedido extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(numPedido))
+                        .addGap(18, 18, 18)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(radioFisico)
                     .addComponent(radioJuridico)
@@ -527,10 +549,17 @@ public class IniciarPedido extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel numPedido;
     private javax.swing.JRadioButton radioFisico;
     private javax.swing.JRadioButton radioJuridico;
     private javax.swing.JTable tablePedido;
     private javax.swing.JTextField textTotal;
     // End of variables declaration//GEN-END:variables
+
+    private void buscaNumPedido() throws SQLException {
+        numPedidoAtual = pedido.buscaIdPedido();
+        numPedido.setText(String.valueOf(numPedidoAtual));
+    }
 }
