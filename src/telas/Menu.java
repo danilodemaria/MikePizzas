@@ -13,6 +13,7 @@ public class Menu extends javax.swing.JFrame {
     public Menu() {
         initComponents();        
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
     }
 
     /**
@@ -28,6 +29,7 @@ public class Menu extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         jMenuItem13 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         menuBebida = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
@@ -56,16 +58,24 @@ public class Menu extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/newLogo.png"))); // NOI18N
 
-        jMenu5.setText("Iniciar");
+        jMenu5.setText("Pedido");
 
         jMenuItem13.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F1, 0));
-        jMenuItem13.setText("Pedido");
+        jMenuItem13.setText("Realizar");
         jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem13ActionPerformed(evt);
             }
         });
         jMenu5.add(jMenuItem13);
+
+        jMenuItem1.setText("Listar");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem1);
 
         jMenuBar1.add(jMenu5);
 
@@ -416,6 +426,18 @@ public class Menu extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        ListarPedido a;
+        try {
+            a = new ListarPedido();
+            a.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -460,6 +482,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;

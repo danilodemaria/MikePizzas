@@ -63,7 +63,7 @@ create table pedido_bebida(
 
 create table pedido_sabor(
 	id serial primary key,
-	id_pizza integer,
+	id_pedido integer,
 	id_sabor integer
 );
 
@@ -74,6 +74,6 @@ ALTER TABLE pedido_pizza ADD FOREIGN KEY (id_pedido) REFERENCES pedido(id);
 ALTER TABLE pedido_pizza ADD FOREIGN KEY (id_pizza) REFERENCES pizza(id);
 ALTER TABLE pedido_bebida ADD FOREIGN KEY (id_pedido) REFERENCES pedido(id);
 ALTER TABLE pedido_bebida ADD FOREIGN KEY (id_bebida) REFERENCES bebida(id);
-ALTER TABLE pedido_sabor ADD FOREIGN KEY (id_pizza) REFERENCES pizza(id);
+ALTER TABLE pedido_sabor ADD FOREIGN KEY (id_pedido) REFERENCES pedido(id);
 ALTER TABLE pedido_sabor ADD FOREIGN KEY (id_sabor) REFERENCES sabor(id);
 

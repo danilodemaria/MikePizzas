@@ -10,6 +10,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -20,17 +21,20 @@ import modelos.Pedido;
 import modelos.Pizza;
 import modelos.Sabor;
 
-public class IniciarPedido extends javax.swing.JFrame {
+public final class IniciarPedido extends javax.swing.JFrame {
 
     public ArrayList<Bebida> listaBebida = new ArrayList<>();
     public ArrayList<Sabor> listaSabor = new ArrayList<>();
     public ArrayList<Pizza> listaTamanho = new ArrayList<>();
     public ArrayList<Fisica> listaFisico = new ArrayList<>();
     public ArrayList<Juridica> listaJuridica = new ArrayList<>();
+    public ArrayList<Integer> idTamanho = new ArrayList<>();
+    public ArrayList<Integer> idBebida = new ArrayList<>();
+    public ArrayList<Integer> idSabores = new ArrayList<>();
     public Pedido pedido = new Pedido();
     public double total = 0;
     public int numPedidoAtual = 0;
-    
+
     public IniciarPedido() throws SQLException {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -50,6 +54,11 @@ public class IniciarPedido extends javax.swing.JFrame {
     public boolean fechar() {
         this.dispose();
         return true;
+    }
+
+    private void buscaNumPedido() throws SQLException {
+        numPedidoAtual = pedido.buscaIdPedido();
+        numPedido.setText(String.valueOf(numPedidoAtual));
     }
 
     public void preencheComboBox() throws SQLException {
@@ -120,6 +129,11 @@ public class IniciarPedido extends javax.swing.JFrame {
 
         buttonSalva.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         buttonSalva.setText("Salvar");
+        buttonSalva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSalvaActionPerformed(evt);
+            }
+        });
 
         buttonSair.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         buttonSair.setText("Sair");
@@ -442,7 +456,7 @@ public class IniciarPedido extends javax.swing.JFrame {
         model.addRow(new Object[]{listaTamanho.get(id).getTamanho(), listaTamanho.get(id).getPreco()});
         total = total + listaTamanho.get(id).getPreco();
         textTotal.setText(String.valueOf(total));
-
+        idTamanho.add(listaTamanho.get(id).getId());
     }//GEN-LAST:event_buttoAdicionarSaborActionPerformed
 
     private void buttoAdicionarTamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttoAdicionarTamActionPerformed
@@ -464,7 +478,7 @@ public class IniciarPedido extends javax.swing.JFrame {
         tablePedido.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
         DefaultTableModel model = (DefaultTableModel) tablePedido.getModel();
         model.addRow(new Object[]{listaSabor.get(id).getNome(), "----"});
-
+        idSabores.add(listaSabor.get(id).getId());
 
     }//GEN-LAST:event_buttoAdicionarTamActionPerformed
 
@@ -489,36 +503,56 @@ public class IniciarPedido extends javax.swing.JFrame {
         model.addRow(new Object[]{listaBebida.get(id).getNome(), listaBebida.get(id).getPreco()});
         total = total + listaBebida.get(id).getPreco();
         textTotal.setText(String.valueOf(total));
+        idBebida.add(listaBebida.get(id).getId());
     }//GEN-LAST:event_buttonAdicionarBebidaActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+    private void buttonSalvaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSalvaActionPerformed
+
+        atualizaIdCliente();
+        pedido.setValor(total);
+        if (pedido.inserePedido(idBebida, idSabores, idTamanho,pedido, numPedidoAtual)) {
+            if (JOptionPane.showConfirmDialog(null, "Pedido inserido, realizar outro pedido?", "Aviso",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                try {
+                    limpaCampos();
+                } catch (SQLException ex) {
+                    Logger.getLogger(IniciarPedido.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                this.dispose();
+            }
+        }
+
+    }//GEN-LAST:event_buttonSalvaActionPerformed
+
+    private void atualizaIdCliente() {
+
+        String aux = "";
+        int id = -1;
+        if (radioFisico.isSelected()) {
+            pedido.setJuridico(false);
+            aux = comboFisico.getSelectedItem().toString();           
+            for (int i = 0; i < listaFisico.size(); i++) {
+                if (aux.equals(listaFisico.get(i).getNome())) {
+                    id = i;                   
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(IniciarPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(IniciarPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(IniciarPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(IniciarPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
+            pedido.setId_cliente(listaFisico.get(id).getId());
+        } else {
+            pedido.setJuridico(true);
+            aux = comboJuridico.getSelectedItem().toString();
+            for (int i = 0; i < listaJuridica.size(); i++) {
+                if (aux.equals(listaJuridica.get(i).getNome())) {
+                    id = i;
+                }
+            }
+            pedido.setId_cliente(listaJuridica.get(id).getId());
+        }
+    }
+
+    public static void main(String args[]) {
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
@@ -558,8 +592,22 @@ public class IniciarPedido extends javax.swing.JFrame {
     private javax.swing.JTextField textTotal;
     // End of variables declaration//GEN-END:variables
 
-    private void buscaNumPedido() throws SQLException {
-        numPedidoAtual = pedido.buscaIdPedido();
-        numPedido.setText(String.valueOf(numPedidoAtual));
+    private void limpaCampos() throws SQLException {
+        comboFisico.setSelectedIndex(0);
+        comboJuridico.setSelectedIndex(0);
+        comboBebida.setSelectedIndex(0);
+        comboSabor.setSelectedIndex(0);
+        comboTamanho.setSelectedIndex(0);
+        radioFisico.setSelected(true);
+        radioJuridico.setSelected(false);
+        DefaultTableModel model = (DefaultTableModel) tablePedido.getModel();
+        model.setRowCount(0);
+        idBebida.clear();
+        idSabores.clear();
+        idTamanho.clear();
+        total = 0;
+        textTotal.setText(String.valueOf(total));
+        buscaNumPedido();
     }
+
 }
