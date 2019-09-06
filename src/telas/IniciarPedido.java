@@ -510,6 +510,10 @@ public final class IniciarPedido extends javax.swing.JFrame {
 
         atualizaIdCliente();
         pedido.setValor(total);
+        
+        
+        
+        
         if (pedido.inserePedido(idBebida, idSabores, idTamanho,pedido, numPedidoAtual)) {
             if (JOptionPane.showConfirmDialog(null, "Pedido inserido, realizar outro pedido?", "Aviso",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {

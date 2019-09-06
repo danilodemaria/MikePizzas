@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 public class Pedido {
 
-
     private int id;
     private int id_cliente;
     private boolean juridico;
@@ -65,18 +64,17 @@ public class Pedido {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-         while(rs.next()){
+        while (rs.next()) {
             pedido = new Pedido();
-            pedido.setId(rs.getInt("id")); 
+            pedido.setId(rs.getInt("id"));
             pedido.setNome_cliente(rs.getString("nome"));
-            pedido.setValor(rs.getDouble("valor"));            
-            lista.add(pedido);                           
+            pedido.setValor(rs.getDouble("valor"));
+            lista.add(pedido);
         }
-         
-         return lista;
+
+        return lista;
     }
-    
-    
+
     public static ArrayList<Pedido> buscaJuridico() throws SQLException {
         ResultSet rs = null;
         PreparedStatement pst;
@@ -91,15 +89,92 @@ public class Pedido {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-         while(rs.next()){
+        while (rs.next()) {
             pedido = new Pedido();
-            pedido.setId(rs.getInt("id")); 
+            pedido.setId(rs.getInt("id"));
             pedido.setNome_cliente(rs.getString("nome"));
-            pedido.setValor(rs.getDouble("valor"));            
-            lista.add(pedido);                           
+            pedido.setValor(rs.getDouble("valor"));
+            lista.add(pedido);
         }
-         
-         return lista;
+
+        return lista;
+    }
+
+    public static ArrayList<Pizza> buscaItensTam(int idPedido) throws SQLException {
+        ResultSet rs = null;
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        Pizza pizza = new Pizza();
+        ArrayList<Pizza> lista = new ArrayList<Pizza>();
+        String stm = "SELECT C .tamanho, C.preco FROM pedido A INNER JOIN pedido_pizza b ON ( b.id_pedido = A.ID ) INNER JOIN pizza C ON ( C.ID = b.id_pizza ) WHERE A.ID = " + idPedido + " \n"
+                + " AND A.juridico = FALSE GROUP BY C.ID, A.juridico";
+
+        try {
+            pst = conn.prepareStatement(stm);
+            rs = pst.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        while (rs.next()) {
+            pizza = new Pizza();
+            pizza.setTamanho(rs.getString("tamanho"));
+            pizza.setPreco(rs.getDouble("preco"));
+            lista.add(pizza);
+        }
+
+        return lista;
+    }
+
+    public static ArrayList<Sabor> buscaItensSabor(int idPedido) throws SQLException {
+        ResultSet rs = null;
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        Sabor sabor = new Sabor();
+        ArrayList<Sabor> lista = new ArrayList<Sabor>();
+        String stm = "SELECT C.nome FROM pedido A INNER JOIN pedido_sabor b ON ( b.id_pedido = A.ID ) INNER JOIN sabor C ON ( C.ID = b.id_sabor ) WHERE A.ID = " + idPedido + " \n"
+                + " AND A.juridico = FALSE GROUP BY C.ID, A.juridico";
+
+        try {
+            pst = conn.prepareStatement(stm);
+            rs = pst.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        while (rs.next()) {
+            sabor = new Sabor();
+            sabor.setNome(rs.getString("nome"));
+            lista.add(sabor);
+        }
+
+        return lista;
+    }
+
+    public static ArrayList<Bebida> buscaItensBebida(int idPedido) throws SQLException {
+        ResultSet rs = null;
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        Bebida bebida = new Bebida();
+        ArrayList<Bebida> lista = new ArrayList<Bebida>();
+        String stm = "SELECT C.nome, C.preco FROM pedido A INNER JOIN pedido_bebida b ON ( b.id_pedido = A.ID ) INNER JOIN bebida C ON ( C.ID = b.id_bebida ) WHERE A.ID = "+idPedido+" \n" +
+" AND A.juridico = FALSE GROUP BY C.ID, A.juridico";
+
+        try {
+            pst = conn.prepareStatement(stm);
+            rs = pst.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        while (rs.next()) {
+            bebida = new Bebida();
+            bebida.setNome(rs.getString("nome"));
+            bebida.setPreco(rs.getDouble("preco"));
+            lista.add(bebida);
+        }
+
+        return lista;
     }
 
     public boolean inserePedido(ArrayList<Integer> idBebida, ArrayList<Integer> idSabores, ArrayList<Integer> idTamanho, Pedido pedido, int numPedidoAtual) {
@@ -116,6 +191,7 @@ public class Pedido {
             pst.setBoolean(3, pedido.isJuridico());
             pst.execute();
             valida = true;
+            System.out.println("cheguei aqui");
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
             valida = false;
@@ -169,73 +245,42 @@ public class Pedido {
         return valida;
     }
 
-    /**
-     * @return the id
-     */
     public int getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
     public void setId(int id) {
         this.id = id;
     }
 
-    /**
-     * @return the valor
-     */
     public double getValor() {
         return valor;
     }
 
-    /**
-     * @param valor the valor to set
-     */
     public void setValor(double valor) {
         this.valor = valor;
     }
 
-    /**
-     * @return the juridico
-     */
     public boolean isJuridico() {
         return juridico;
     }
 
-    /**
-     * @param juridico the juridico to set
-     */
     public void setJuridico(boolean juridico) {
         this.juridico = juridico;
     }
 
-    /**
-     * @return the id_cliente
-     */
     public int getId_cliente() {
         return id_cliente;
     }
 
-    /**
-     * @param id_cliente the id_cliente to set
-     */
     public void setId_cliente(int id_cliente) {
         this.id_cliente = id_cliente;
     }
-    
-    
-    /**
-     * @return the nome_cliente
-     */
+
     public String getNome_cliente() {
         return nome_cliente;
     }
 
-    /**
-     * @param nome_cliente the nome_cliente to set
-     */
     public void setNome_cliente(String nome_cliente) {
         this.nome_cliente = nome_cliente;
     }
