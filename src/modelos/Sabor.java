@@ -10,6 +10,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Sabor {    
+
+    public static String buscaSabores(int id) throws SQLException {
+        ResultSet rs = null;
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+
+        String aux = "";
+        String stm = "SELECT * from sabor where id = " + id;
+        try {
+            pst = conn.prepareStatement(stm);
+            rs = pst.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        while(rs.next()){
+            aux = rs.getString("nome");
+        }
+
+        return aux;
+    }
     
     private int id;
     private String nome;

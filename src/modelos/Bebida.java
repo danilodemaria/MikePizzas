@@ -9,25 +9,24 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Bebida {  
+public class Bebida {
 
-        
     private int id;
     private String nome;
     private double preco;
-    
-    public Bebida(){
-        
+
+    public Bebida() {
+
     }
-    
-    public Bebida(int id, String nome, double preco){
+
+    public Bebida(int id, String nome, double preco) {
         this.id = id;
         this.nome = nome;
         this.preco = preco;
     }
-    
-    public static boolean cadastrar(Bebida nova) {      
-        
+
+    public static boolean cadastrar(Bebida nova) {
+
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
         String stm = "INSERT INTO bebida (nome,preco,excluido) VALUES (?,?,?)";
@@ -42,49 +41,69 @@ public class Bebida {
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        }        
+        }
     }
-    
-    public static boolean remover(Bebida bebida){
+
+    public static boolean remover(Bebida bebida) {
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
-        String stm = "UPDATE bebida set excluido = true where id = "+bebida.getId();
+        String stm = "UPDATE bebida set excluido = true where id = " + bebida.getId();
 
         try {
-            pst = conn.prepareStatement(stm);            
+            pst = conn.prepareStatement(stm);
             pst.execute();
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        }        
+        }
     }
-    
-    
+
     public static ArrayList<Bebida> buscaBebidas() throws SQLException {
         ResultSet rs = null;
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
         Bebida bebida = new Bebida();
         ArrayList<Bebida> lista = new ArrayList<Bebida>();
-        String stm = "select * from bebida where excluido = false";        
-       
+        String stm = "select * from bebida where excluido = false";
+
         try {
             pst = conn.prepareStatement(stm);
             rs = pst.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-        }   
-        
-        while(rs.next()){
+        }
+
+        while (rs.next()) {
             bebida = new Bebida();
-            bebida.setId(Integer.parseInt(rs.getString("id"))); 
+            bebida.setId(Integer.parseInt(rs.getString("id")));
             bebida.setNome(rs.getString("nome"));
-            bebida.setPreco(rs.getDouble("preco"));            
-            lista.add(bebida);                           
+            bebida.setPreco(rs.getDouble("preco"));
+            lista.add(bebida);
         }
 
         return lista;
+    }
+
+    public static String buscaBebida(int id_bebida) throws SQLException {
+        ResultSet rs = null;
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+
+        String aux = "";
+        String stm = "SELECT * from bebida where id = " + id_bebida;        
+        try {
+            pst = conn.prepareStatement(stm);
+            rs = pst.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        while(rs.next()){
+            aux = rs.getString("nome");
+        }
+
+        return aux;
     }
 
     public Bebida(int id, String nome) {
@@ -134,5 +153,4 @@ public class Bebida {
         this.preco = preco;
     }
 
-    
 }

@@ -43,20 +43,20 @@ public class Pizza {
             return false;
         }
     }
-    
-     public boolean remover(Pizza pizza) {
-         PreparedStatement pst;
+
+    public boolean remover(Pizza pizza) {
+        PreparedStatement pst;
         Connection conn = Conexao.Connect();
-        String stm = "UPDATE pizza set excluido = true where id = "+pizza.getId();
+        String stm = "UPDATE pizza set excluido = true where id = " + pizza.getId();
 
         try {
-            pst = conn.prepareStatement(stm);            
+            pst = conn.prepareStatement(stm);
             pst.execute();
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        } 
+        }
     }
 
     public static ArrayList<Pizza> buscaPizzas() throws SQLException {
@@ -84,6 +84,27 @@ public class Pizza {
 
         return lista;
 
+    }
+
+    public static String buscaPizzas(int id_pizza) throws SQLException {
+        ResultSet rs = null;
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+
+        String aux = "";
+        String stm = "SELECT * from pizza where id = " + id_pizza;
+        try {
+            pst = conn.prepareStatement(stm);
+            rs = pst.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        while (rs.next()) {
+            aux = rs.getString("tamanho");
+        }
+
+        return aux;
     }
 
     /**
@@ -127,7 +148,5 @@ public class Pizza {
     public void setPreco(double preco) {
         this.preco = preco;
     }
-
-   
 
 }

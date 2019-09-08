@@ -13,7 +13,9 @@ public class Pedido {
 
     private int id;
     private int id_cliente;
-    private boolean juridico;
+    private int id_bebida;
+    private int id_pizza;
+    private ArrayList<Integer> idSabores = new ArrayList<>();
     private double valor;
     private String nome_cliente;
 
@@ -21,268 +23,252 @@ public class Pedido {
 
     }
 
-    public Pedido(int id, int id_cliente, boolean juridico, double valor, String nome_cliente) {
+    public Pedido(int id, int id_cliente, int id_bebida, int id_pizza,ArrayList<Integer> idSabores, double valor, String nome_cliente) {
         this.id = id;
         this.id_cliente = id_cliente;
-        this.nome_cliente = nome_cliente;
-        this.juridico = juridico;
+        this.id_bebida = id_bebida;
+        this.id_pizza = id_pizza;
+        this.idSabores = idSabores;
         this.valor = valor;
+        this.nome_cliente = nome_cliente;        
     }
-
-    public int buscaIdPedido() throws SQLException {
-        ResultSet rs = null;
+    
+    
+    public boolean insereFisico(Pedido pedido) {
+        
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
-        String stm = "select id from pedido order by id desc limit 1";
-        int aux = 0;
-        try {
-            pst = conn.prepareStatement(stm);
-            rs = pst.executeQuery();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+        String stm = "INSERT INTO pedido_fisico (id_cliente,id_bebida,id_pizza,id_sabores,total, nome_cliente) VALUES (?,?,?,?,?,?)";
+        
+        String aux = "";
+        aux = aux + String.valueOf(pedido.getIdSabores().get(0));
+        for(int i=1;i<pedido.getIdSabores().size();i++){            
+            aux = aux + ","+String.valueOf(pedido.getIdSabores().get(i));
         }
-
-        while (rs.next()) {
-            aux = rs.getInt("id");
-        }
-
-        aux = aux + 1;
-        return aux;
-    }
-
-    public static ArrayList<Pedido> buscaFisico() throws SQLException {
-        ResultSet rs = null;
-        PreparedStatement pst;
-        Connection conn = Conexao.Connect();
-        Pedido pedido = new Pedido();
-        ArrayList<Pedido> lista = new ArrayList<Pedido>();
-        String stm = "select  a.id, b.nome, a.valor from pedido a, pessoa_fisica b where (a.id_cliente = b.id) and juridico = false";
-        try {
-            pst = conn.prepareStatement(stm);
-            rs = pst.executeQuery();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        while (rs.next()) {
-            pedido = new Pedido();
-            pedido.setId(rs.getInt("id"));
-            pedido.setNome_cliente(rs.getString("nome"));
-            pedido.setValor(rs.getDouble("valor"));
-            lista.add(pedido);
-        }
-
-        return lista;
-    }
-
-    public static ArrayList<Pedido> buscaJuridico() throws SQLException {
-        ResultSet rs = null;
-        PreparedStatement pst;
-        Connection conn = Conexao.Connect();
-        Pedido pedido = new Pedido();
-        ArrayList<Pedido> lista = new ArrayList<Pedido>();
-        String stm = "select  a.id, b.nome, a.valor from pedido a, pessoa_juridica b where (a.id_cliente = b.id) and juridico = true";
-        try {
-            pst = conn.prepareStatement(stm);
-            rs = pst.executeQuery();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        while (rs.next()) {
-            pedido = new Pedido();
-            pedido.setId(rs.getInt("id"));
-            pedido.setNome_cliente(rs.getString("nome"));
-            pedido.setValor(rs.getDouble("valor"));
-            lista.add(pedido);
-        }
-
-        return lista;
-    }
-
-    public static ArrayList<Pizza> buscaItensTam(int idPedido) throws SQLException {
-        ResultSet rs = null;
-        PreparedStatement pst;
-        Connection conn = Conexao.Connect();
-        Pizza pizza = new Pizza();
-        ArrayList<Pizza> lista = new ArrayList<Pizza>();
-        String stm = "SELECT C .tamanho, C.preco FROM pedido A INNER JOIN pedido_pizza b ON ( b.id_pedido = A.ID ) INNER JOIN pizza C ON ( C.ID = b.id_pizza ) WHERE A.ID = " + idPedido + " \n"
-                + " AND A.juridico = FALSE GROUP BY C.ID, A.juridico";
-
-        try {
-            pst = conn.prepareStatement(stm);
-            rs = pst.executeQuery();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        while (rs.next()) {
-            pizza = new Pizza();
-            pizza.setTamanho(rs.getString("tamanho"));
-            pizza.setPreco(rs.getDouble("preco"));
-            lista.add(pizza);
-        }
-
-        return lista;
-    }
-
-    public static ArrayList<Sabor> buscaItensSabor(int idPedido) throws SQLException {
-        ResultSet rs = null;
-        PreparedStatement pst;
-        Connection conn = Conexao.Connect();
-        Sabor sabor = new Sabor();
-        ArrayList<Sabor> lista = new ArrayList<Sabor>();
-        String stm = "SELECT C.nome FROM pedido A INNER JOIN pedido_sabor b ON ( b.id_pedido = A.ID ) INNER JOIN sabor C ON ( C.ID = b.id_sabor ) WHERE A.ID = " + idPedido + " \n"
-                + " AND A.juridico = FALSE GROUP BY C.ID, A.juridico";
-
-        try {
-            pst = conn.prepareStatement(stm);
-            rs = pst.executeQuery();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        while (rs.next()) {
-            sabor = new Sabor();
-            sabor.setNome(rs.getString("nome"));
-            lista.add(sabor);
-        }
-
-        return lista;
-    }
-
-    public static ArrayList<Bebida> buscaItensBebida(int idPedido) throws SQLException {
-        ResultSet rs = null;
-        PreparedStatement pst;
-        Connection conn = Conexao.Connect();
-        Bebida bebida = new Bebida();
-        ArrayList<Bebida> lista = new ArrayList<Bebida>();
-        String stm = "SELECT C.nome, C.preco FROM pedido A INNER JOIN pedido_bebida b ON ( b.id_pedido = A.ID ) INNER JOIN bebida C ON ( C.ID = b.id_bebida ) WHERE A.ID = "+idPedido+" \n" +
-" AND A.juridico = FALSE GROUP BY C.ID, A.juridico";
-
-        try {
-            pst = conn.prepareStatement(stm);
-            rs = pst.executeQuery();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        while (rs.next()) {
-            bebida = new Bebida();
-            bebida.setNome(rs.getString("nome"));
-            bebida.setPreco(rs.getDouble("preco"));
-            lista.add(bebida);
-        }
-
-        return lista;
-    }
-
-    public boolean inserePedido(ArrayList<Integer> idBebida, ArrayList<Integer> idSabores, ArrayList<Integer> idTamanho, Pedido pedido, int numPedidoAtual) {
-        PreparedStatement pst;
-        Connection conn = Conexao.Connect();
-        boolean valida = false;
-
-        // Inserindo pedido
-        String stm = "INSERT INTO pedido (id_cliente,valor,juridico) VALUES (?,?,?)";
+        
         try {
             pst = conn.prepareStatement(stm);
             pst.setInt(1, pedido.getId_cliente());
-            pst.setDouble(2, pedido.getValor());
-            pst.setBoolean(3, pedido.isJuridico());
+            pst.setInt(2, pedido.getId_bebida());
+            pst.setInt(3,pedido.getId_pizza());
+            pst.setString(4,aux);
+            pst.setDouble(5, pedido.getValor());
+            pst.setString(6, pedido.getNome_cliente());
             pst.execute();
-            valida = true;
-            System.out.println("cheguei aqui");
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-            valida = false;
+            return false;
+        }     
+    }
+    
+    public boolean insereJuridico(Pedido pedido) {
+        
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        String stm = "INSERT INTO pedido_juridico (id_cliente,id_bebida,id_pizza,id_sabores,total, nome_cliente) VALUES (?,?,?,?,?,?)";
+        
+        String aux = "";
+        aux = aux + String.valueOf(pedido.getIdSabores().get(0));
+        for(int i=1;i<pedido.getIdSabores().size();i++){            
+            aux = aux + ","+String.valueOf(pedido.getIdSabores().get(i));
         }
-        System.out.println("pedido atual: " + numPedidoAtual);
-        // Inserindo bebidas do pedido
-        stm = "INSERT INTO pedido_bebida (id_pedido,id_bebida) VALUES (?,?)";
+        
         try {
             pst = conn.prepareStatement(stm);
-            for (int i = 0; i < idBebida.size(); i++) {
-                pst.setInt(1, numPedidoAtual);
-                pst.setInt(2, idBebida.get(i));
-                pst.execute();
-            }
-            valida = true;
+            pst.setInt(1, pedido.getId_cliente());
+            pst.setInt(2, pedido.getId_bebida());
+            pst.setInt(3,pedido.getId_pizza());
+            pst.setString(4,aux);
+            pst.setDouble(5, pedido.getValor());
+            pst.setString(6, pedido.getNome_cliente());
+            pst.execute();
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-            valida = false;
-        }
-
-        // Inserindo pizzas do pedido
-        stm = "INSERT INTO pedido_pizza (id_pedido,id_pizza) VALUES (?,?)";
+            return false;
+        }     
+    }
+    
+    public ArrayList<Pedido> buscaPedidosFisicos() throws SQLException{
+        ResultSet rs = null;
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        Pedido pedido = new Pedido();
+        ArrayList<Pedido> lista = new ArrayList<Pedido>();
+        ArrayList<Integer> sabores = new ArrayList<>();
+        String stm = "select * from pedido_fisico";        
+        String aux;
         try {
             pst = conn.prepareStatement(stm);
-            for (int i = 0; i < idTamanho.size(); i++) {
-                pst.setInt(1, numPedidoAtual);
-                pst.setInt(2, idTamanho.get(i));
-                pst.execute();
-            }
-            valida = true;
+            rs = pst.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-            valida = false;
+        }   
+        
+        while(rs.next()){
+            aux = "";
+            sabores.clear();
+            pedido = new Pedido();
+            pedido.setId(rs.getInt("id"));  
+            pedido.setId_cliente(rs.getInt("id_cliente"));
+            pedido.setId_pizza(rs.getInt("id_pizza"));
+            pedido.setId_bebida(rs.getInt("id_bebida"));
+            pedido.setValor(rs.getDouble("total"));
+            pedido.setNome_cliente(rs.getString("nome_cliente")); 
+            aux = rs.getString("id_sabores");
+            
+            String[] parts = aux.split(",");
+            
+            for(int i=0;i<parts.length;i++){
+                sabores.add(Integer.parseInt(parts[i]));
+            }
+            pedido.setIdSabores(sabores);
+           
+            lista.add(pedido);                           
         }
 
-        // Inserindo sabores do pedido
-        stm = "INSERT INTO pedido_sabor (id_pedido,id_sabor) VALUES (?,?)";
+        return lista;
+    }
+    
+    public ArrayList<Pedido> buscaPedidosJuridicos() throws SQLException{
+        ResultSet rs = null;
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        Pedido pedido = new Pedido();
+        ArrayList<Pedido> lista = new ArrayList<Pedido>();
+        ArrayList<Integer> sabores = new ArrayList<>();
+        String stm = "select * from pedido_juridico";        
+        String aux;
         try {
             pst = conn.prepareStatement(stm);
-            for (int i = 0; i < idSabores.size(); i++) {
-                pst.setInt(1, numPedidoAtual);
-                pst.setInt(2, idSabores.get(i));
-                pst.execute();
-            }
-            valida = true;
+            rs = pst.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-            valida = false;
+        }   
+        
+        while(rs.next()){
+            aux = "";
+            sabores.clear();
+            pedido = new Pedido();
+            pedido.setId(rs.getInt("id"));  
+            pedido.setId_cliente(rs.getInt("id_cliente"));
+            pedido.setId_pizza(rs.getInt("id_pizza"));
+            pedido.setId_bebida(rs.getInt("id_bebida"));
+            pedido.setValor(rs.getDouble("total"));
+            pedido.setNome_cliente(rs.getString("nome_cliente")); 
+            aux = rs.getString("id_sabores");
+            
+            String[] parts = aux.split(",");
+            
+            for(int i=0;i<parts.length;i++){
+                sabores.add(Integer.parseInt(parts[i]));
+            }
+            pedido.setIdSabores(sabores);
+           
+            lista.add(pedido);                           
         }
 
-        return valida;
+        return lista;
     }
 
+    /**
+     * @return the id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * @param id the id to set
+     */
     public void setId(int id) {
         this.id = id;
     }
 
-    public double getValor() {
-        return valor;
-    }
-
-    public void setValor(double valor) {
-        this.valor = valor;
-    }
-
-    public boolean isJuridico() {
-        return juridico;
-    }
-
-    public void setJuridico(boolean juridico) {
-        this.juridico = juridico;
-    }
-
+    /**
+     * @return the id_cliente
+     */
     public int getId_cliente() {
         return id_cliente;
     }
 
+    /**
+     * @param id_cliente the id_cliente to set
+     */
     public void setId_cliente(int id_cliente) {
         this.id_cliente = id_cliente;
     }
 
+    /**
+     * @return the id_bebida
+     */
+    public int getId_bebida() {
+        return id_bebida;
+    }
+
+    /**
+     * @param id_bebida the id_bebida to set
+     */
+    public void setId_bebida(int id_bebida) {
+        this.id_bebida = id_bebida;
+    }
+
+    /**
+     * @return the id_pizza
+     */
+    public int getId_pizza() {
+        return id_pizza;
+    }
+
+    /**
+     * @param id_pizza the id_pizza to set
+     */
+    public void setId_pizza(int id_pizza) {
+        this.id_pizza = id_pizza;
+    }
+
+    /**
+     * @return the idSabores
+     */
+    public ArrayList<Integer> getIdSabores() {
+        return idSabores;
+    }
+
+    /**
+     * @param idSabores the idSabores to set
+     */
+    public void setIdSabores(ArrayList<Integer> idSabores) {
+        this.idSabores = idSabores;
+    }
+
+    /**
+     * @return the valor
+     */
+    public double getValor() {
+        return valor;
+    }
+
+    /**
+     * @param valor the valor to set
+     */
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
+
+    /**
+     * @return the nome_cliente
+     */
     public String getNome_cliente() {
         return nome_cliente;
     }
 
+    /**
+     * @param nome_cliente the nome_cliente to set
+     */
     public void setNome_cliente(String nome_cliente) {
         this.nome_cliente = nome_cliente;
     }
+
 
 }

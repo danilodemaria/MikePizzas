@@ -42,38 +42,30 @@ create table pessoa_juridica(
 	excluido boolean
 );
 
-create table pedido(
+create table pedido_fisico(
 	id serial primary key,
 	id_cliente integer,
-	valor decimal(10,2),
-	juridico boolean
+	id_pizza integer,
+	id_bebida integer,
+	total decimal(10,2),
+	id_sabores varchar(100),
+	nome_cliente varchar(100)
 );
 
-create table pedido_pizza(
+create table pedido_juridico(
 	id serial primary key,
-	id_pedido integer,
-	id_pizza integer
+	id_cliente integer,
+	id_pizza integer,
+	id_bebida integer,
+	total decimal(10,2),
+	id_sabores varchar(100),
+	nome_cliente varchar(100)
 );
 
-create table pedido_bebida(
-	id serial primary key,
-	id_pedido integer,
-	id_bebida integer
-);
+ALTER TABLE pedido_fisico ADD FOREIGN KEY (id_cliente) REFERENCES pessoa_fisica(id);
+ALTER TABLE pedido_fisico ADD FOREIGN KEY (id_pizza) REFERENCES pizza(id);
+ALTER TABLE pedido_fisico ADD FOREIGN KEY (id_bebida) REFERENCES bebida(id);
 
-create table pedido_sabor(
-	id serial primary key,
-	id_pedido integer,
-	id_sabor integer
-);
-
-
-ALTER TABLE pedido ADD FOREIGN KEY (id_cliente) REFERENCES pessoa_fisica(id);
-ALTER TABLE pedido ADD FOREIGN KEY (id_cliente) REFERENCES pessoa_juridica(id);
-ALTER TABLE pedido_pizza ADD FOREIGN KEY (id_pedido) REFERENCES pedido(id);
-ALTER TABLE pedido_pizza ADD FOREIGN KEY (id_pizza) REFERENCES pizza(id);
-ALTER TABLE pedido_bebida ADD FOREIGN KEY (id_pedido) REFERENCES pedido(id);
-ALTER TABLE pedido_bebida ADD FOREIGN KEY (id_bebida) REFERENCES bebida(id);
-ALTER TABLE pedido_sabor ADD FOREIGN KEY (id_pedido) REFERENCES pedido(id);
-ALTER TABLE pedido_sabor ADD FOREIGN KEY (id_sabor) REFERENCES sabor(id);
-
+ALTER TABLE pedido_juridico ADD FOREIGN KEY (id_cliente) REFERENCES pessoa_fisica(id);
+ALTER TABLE pedido_juridico ADD FOREIGN KEY (id_pizza) REFERENCES pizza(id);
+ALTER TABLE pedido_juridico ADD FOREIGN KEY (id_bebida) REFERENCES bebida(id);
