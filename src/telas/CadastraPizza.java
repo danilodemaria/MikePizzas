@@ -5,7 +5,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 import modelos.Pizza;
@@ -14,7 +13,7 @@ public class CadastraPizza extends javax.swing.JFrame {
 
     public CadastraPizza() {
         initComponents();
-        this.setLocationRelativeTo(null);        
+        this.setLocationRelativeTo(null);
         KeyStroke escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0, false);
         Action escapeAction = new AbstractAction() {
             @Override
@@ -25,7 +24,7 @@ public class CadastraPizza extends javax.swing.JFrame {
         getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(escapeKeyStroke, "ESCAPE");
         getRootPane().getActionMap().put("ESCAPE", escapeAction);
     }
-    
+
     public boolean fechar() {
         this.dispose();
         return true;
@@ -118,45 +117,40 @@ public class CadastraPizza extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCadastrarActionPerformed
-        // TODO add your handling code here:
+        // Cria nova pizza
         Pizza pizza = new Pizza();
-        boolean retorno = false;
 
+        // Setando os atributos de pizza
         pizza.setTamanho(textTamanho.getText().toUpperCase());
         pizza.setPreco(Double.parseDouble(textPreco.getText()));
 
-        retorno = pizza.cadastra(pizza);
-        
-        if(retorno){
+        // Caso pizza seja cadastrada com sucesso        
+        if (pizza.cadastra(pizza)) {
             if (JOptionPane.showConfirmDialog(null, "Pizza cadastrada, inserir novamente?", "Aviso",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 limpaCampos();
             } else {
                 this.dispose();
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Houve algum problema, verifique.");
         }
     }//GEN-LAST:event_buttonCadastrarActionPerformed
 
     private void textTamanhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textTamanhoActionPerformed
-        // TODO add your handling code here:
         textPreco.requestFocus();
     }//GEN-LAST:event_textTamanhoActionPerformed
 
     private void textPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textPrecoActionPerformed
-        // TODO add your handling code here:
         buttonCadastrarActionPerformed(null);
     }//GEN-LAST:event_textPrecoActionPerformed
 
-    public void limpaCampos(){
+    public void limpaCampos() {
         textPreco.setText(null);
         textTamanho.setText(null);
         textTamanho.requestFocus();
     }
-            
-    
-    
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {

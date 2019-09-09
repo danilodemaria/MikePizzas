@@ -25,6 +25,7 @@ public class Pizza {
         this.preco = preco;
     }
 
+    // Método para cadastrar uma pizza
     public static boolean cadastra(Pizza pizza) {
 
         PreparedStatement pst;
@@ -44,6 +45,7 @@ public class Pizza {
         }
     }
 
+    // Método para remover uma pizza
     public boolean remover(Pizza pizza) {
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
@@ -59,6 +61,7 @@ public class Pizza {
         }
     }
 
+    // Método para buscar todas as pizzas ativas no banco de dados
     public static ArrayList<Pizza> buscaPizzas() throws SQLException {
         ResultSet rs = null;
         PreparedStatement pst;
@@ -86,13 +89,14 @@ public class Pizza {
 
     }
 
-    public static String buscaPizzas(int id_pizza) throws SQLException {
+    // Método para buscar uma pizza
+    public static String buscaPizzas(Pedido pedido) throws SQLException {
         ResultSet rs = null;
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
 
         String aux = "";
-        String stm = "SELECT * from pizza where id = " + id_pizza;
+        String stm = "SELECT * from pizza where id = " + pedido.getId_pizza();
         try {
             pst = conn.prepareStatement(stm);
             rs = pst.executeQuery();
@@ -107,44 +111,26 @@ public class Pizza {
         return aux;
     }
 
-    /**
-     * @return the id
-     */
     public int getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
     public void setId(int id) {
         this.id = id;
     }
 
-    /**
-     * @return the tamanho
-     */
     public String getTamanho() {
         return tamanho;
     }
 
-    /**
-     * @param tamanho the tamanho to set
-     */
     public void setTamanho(String tamanho) {
         this.tamanho = tamanho;
     }
 
-    /**
-     * @return the preco
-     */
     public double getPreco() {
         return preco;
     }
 
-    /**
-     * @param preco the preco to set
-     */
     public void setPreco(double preco) {
         this.preco = preco;
     }

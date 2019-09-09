@@ -18,14 +18,16 @@ public class Juridica extends Cliente {
 
     }
 
-    public Juridica(int id, String endereco, String nome, String cnpj, String inscricao) {
+    public Juridica(int id, String endereco, String nome, String cnpj, String inscricao, String telefone) {
         this.id = id;
         this.endereco = endereco;
         this.nome = nome;
         this.cnpj = cnpj;
         this.inscricaoEstadual = inscricao;
+        this.telefone = telefone;
     }
 
+    // Método para cadastrar uma pessoa juridica no banco
     public boolean Cadastra(Juridica pessoa) {
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
@@ -46,6 +48,7 @@ public class Juridica extends Cliente {
         }
     }
 
+    // Método para buscar todos os clientes juridicos
     public static ArrayList<Juridica> buscaJuridico() throws SQLException {
         ResultSet rs = null;
         PreparedStatement pst;
@@ -75,6 +78,7 @@ public class Juridica extends Cliente {
         return lista;
     }
 
+    // Método para remover um cliente juridico
     public boolean remover(Juridica pessoa) {
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
@@ -90,30 +94,18 @@ public class Juridica extends Cliente {
         }
     }
 
-    /**
-     * @return the cnpj
-     */
     public String getCnpj() {
         return cnpj;
     }
 
-    /**
-     * @param cnpj the cnpj to set
-     */
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
 
-    /**
-     * @return the inscricaoEstadual
-     */
     public String getInscricaoEstadual() {
         return inscricaoEstadual;
     }
 
-    /**
-     * @param inscricaoEstadual the inscricaoEstadual to set
-     */
     public void setInscricaoEstadual(String inscricaoEstadual) {
         this.inscricaoEstadual = inscricaoEstadual;
     }

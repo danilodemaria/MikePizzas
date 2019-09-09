@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+// Classe para controle das bebidas
 public class Bebida {
 
     private int id;
@@ -25,8 +26,8 @@ public class Bebida {
         this.preco = preco;
     }
 
+    // Método para cadastrar uma nova bebida
     public static boolean cadastrar(Bebida nova) {
-
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
         String stm = "INSERT INTO bebida (nome,preco,excluido) VALUES (?,?,?)";
@@ -44,6 +45,7 @@ public class Bebida {
         }
     }
 
+    // Método para remover uma bebida
     public static boolean remover(Bebida bebida) {
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
@@ -59,6 +61,7 @@ public class Bebida {
         }
     }
 
+    // Método para buscar todas bebidas ativas no banco de dados
     public static ArrayList<Bebida> buscaBebidas() throws SQLException {
         ResultSet rs = null;
         PreparedStatement pst;
@@ -85,21 +88,22 @@ public class Bebida {
         return lista;
     }
 
-    public static String buscaBebida(int id_bebida) throws SQLException {
+    // Método que busca apenas uma bebida por id do pedido
+    public static String buscaBebida(Pedido pedido) throws SQLException {
         ResultSet rs = null;
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
 
         String aux = "";
-        String stm = "SELECT * from bebida where id = " + id_bebida;        
+        String stm = "SELECT * from bebida where id = " + pedido.getId_bebida();
         try {
             pst = conn.prepareStatement(stm);
             rs = pst.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        while(rs.next()){
+
+        while (rs.next()) {
             aux = rs.getString("nome");
         }
 
@@ -111,44 +115,26 @@ public class Bebida {
         this.nome = nome;
     }
 
-    /**
-     * @return the id
-     */
     public int getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
     public void setId(int id) {
         this.id = id;
     }
 
-    /**
-     * @return the nome
-     */
     public String getNome() {
         return nome;
     }
 
-    /**
-     * @param nome the nome to set
-     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /**
-     * @return the preco
-     */
     public double getPreco() {
         return preco;
     }
 
-    /**
-     * @param preco the preco to set
-     */
     public void setPreco(double preco) {
         this.preco = preco;
     }

@@ -9,44 +9,23 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Sabor {    
+public class Sabor {
 
-    public static String buscaSabores(int id) throws SQLException {
-        ResultSet rs = null;
-        PreparedStatement pst;
-        Connection conn = Conexao.Connect();
-
-        String aux = "";
-        String stm = "SELECT * from sabor where id = " + id;
-        try {
-            pst = conn.prepareStatement(stm);
-            rs = pst.executeQuery();
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        while(rs.next()){
-            aux = rs.getString("nome");
-        }
-
-        return aux;
-    }
-    
     private int id;
     private String nome;
     private String ingredientes;
-    
-    public Sabor(){
-        
+
+    public Sabor() {
+
     }
-    
-    
-    public Sabor(int id, String nome, String ingredientes){
+
+    public Sabor(int id, String nome, String ingredientes) {
         this.id = id;
         this.nome = nome;
         this.ingredientes = ingredientes;
     }
-    
+
+    // Méotodo para cadastrar um sabor
     public static boolean cadastra(Sabor sabor) {
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
@@ -62,92 +41,96 @@ public class Sabor {
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        }        
+        }
     }
-    
+
+    // Método para remover um sabor
     public boolean remover(Sabor sabor) {
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
-        String stm = "UPDATE sabor set excluido = true where id = "+sabor.getId();
+        String stm = "UPDATE sabor set excluido = true where id = " + sabor.getId();
 
         try {
-            pst = conn.prepareStatement(stm);            
+            pst = conn.prepareStatement(stm);
             pst.execute();
             return true;
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
-        }        
+        }
     }
-    
-    public static ArrayList<Sabor> buscaSabores() throws SQLException{
+
+    // Método para buscar um sabor
+    public static String buscaSabores(int id) throws SQLException {
         ResultSet rs = null;
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
-        Sabor sabor = new Sabor();
-        ArrayList<Sabor> lista = new ArrayList<Sabor>();
-        String stm = "select * from sabor where excluido = false";        
-       
+
+        String aux = "";
+        String stm = "SELECT * from sabor where id = " + id;
         try {
             pst = conn.prepareStatement(stm);
             rs = pst.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-        }   
-        
-        while(rs.next()){
+        }
+
+        while (rs.next()) {
+            aux = rs.getString("nome");
+        }
+
+        return aux;
+    }
+
+    // Método para buscar todos os sabores ativos
+    public static ArrayList<Sabor> buscaSabores() throws SQLException {
+        ResultSet rs = null;
+        PreparedStatement pst;
+        Connection conn = Conexao.Connect();
+        Sabor sabor = new Sabor();
+        ArrayList<Sabor> lista = new ArrayList<Sabor>();
+        String stm = "select * from sabor where excluido = false";
+
+        try {
+            pst = conn.prepareStatement(stm);
+            rs = pst.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        while (rs.next()) {
             sabor = new Sabor();
-            sabor.setId(Integer.parseInt(rs.getString("id"))); 
+            sabor.setId(Integer.parseInt(rs.getString("id")));
             sabor.setNome(rs.getString("nome"));
-            sabor.setIngredientes(rs.getString("ingredientes"));            
-            lista.add(sabor);                           
+            sabor.setIngredientes(rs.getString("ingredientes"));
+            lista.add(sabor);
         }
 
         return lista;
     }
 
-    /**
-     * @return the id
-     */
     public int getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
     public void setId(int id) {
         this.id = id;
     }
 
-    /**
-     * @return the nome
-     */
     public String getNome() {
         return nome;
     }
 
-    /**
-     * @param nome the nome to set
-     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /**
-     * @return the ingredientes
-     */
     public String getIngredientes() {
         return ingredientes;
     }
 
-    /**
-     * @param ingredientes the ingredientes to set
-     */
     public void setIngredientes(String ingredientes) {
         this.ingredientes = ingredientes;
     }
-
-    
 
 }

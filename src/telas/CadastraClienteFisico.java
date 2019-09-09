@@ -1,4 +1,3 @@
-
 package telas;
 
 import java.text.ParseException;
@@ -9,9 +8,12 @@ import modelos.Fisica;
 
 public class CadastraClienteFisico extends javax.swing.JFrame {
 
+    // Mascara para campo cpf
     MaskFormatter mascaracpf;
+
     public CadastraClienteFisico() {
         initComponents();
+        // Coloca frame no meio da tela
         this.setLocationRelativeTo(null);
     }
 
@@ -162,58 +164,52 @@ public class CadastraClienteFisico extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonCadastraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCadastraActionPerformed
-        // TODO add your handling code here:
+        // Cria nova pessoa fisica
         Fisica pessoa = new Fisica();
-        boolean retorno = false;
-        
+
+        // Seta os atributos da pessoa
         pessoa.setNome(textNome.getText().toUpperCase());
         pessoa.setEndereco(textEndereco.getText().toUpperCase());
         pessoa.setTelefone(textTelefone.getText());
         pessoa.setCpf(textCPF.getText());
         pessoa.setRg(textRG.getText());
-        
-        retorno = pessoa.Cadastra(pessoa);
-        
-        if(retorno){
+
+        // Se pessoa cadastrar com sucesso
+        if (pessoa.Cadastra(pessoa)) {
             if (JOptionPane.showConfirmDialog(null, "Pessoa física cadastrada, inserir novamente?", "Aviso",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 limpaCampos();
             } else {
                 this.dispose();
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Houve algum problema, verifique.");
         }
-        
-        
+
+
     }//GEN-LAST:event_buttonCadastraActionPerformed
 
     private void textNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNomeActionPerformed
-        // TODO add your handling code here:
         textEndereco.requestFocus();
     }//GEN-LAST:event_textNomeActionPerformed
 
     private void textEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textEnderecoActionPerformed
-        // TODO add your handling code here:
         textTelefone.requestFocus();
     }//GEN-LAST:event_textEnderecoActionPerformed
 
     private void textTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textTelefoneActionPerformed
-        // TODO add your handling code here:
         textCPF.requestFocus();
     }//GEN-LAST:event_textTelefoneActionPerformed
 
     private void textCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCPFActionPerformed
-        // TODO add your handling code here:
         textRG.requestFocus();
     }//GEN-LAST:event_textCPFActionPerformed
 
     private void textRGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textRGActionPerformed
-        // TODO add your handling code here:
         buttonCadastraActionPerformed(null);
     }//GEN-LAST:event_textRGActionPerformed
 
-    public void limpaCampos(){
+    public void limpaCampos() {
         textNome.setText(null);
         textCPF.setText(null);
         textRG.setText(null);
@@ -221,7 +217,7 @@ public class CadastraClienteFisico extends javax.swing.JFrame {
         textTelefone.setText(null);
         textNome.requestFocus();
     }
-    
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {

@@ -1,4 +1,3 @@
-
 package telas;
 
 import java.text.ParseException;
@@ -10,6 +9,7 @@ import modelos.Juridica;
 public class CadastraClienteJuridico extends javax.swing.JFrame {
 
     MaskFormatter mascaracnpj;
+
     public CadastraClienteJuridico() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -159,58 +159,51 @@ public class CadastraClienteJuridico extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonCadastraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCadastraActionPerformed
-        // TODO add your handling code here:
+        // Criando pessoa juridica
         Juridica pessoa = new Juridica();
-        boolean retorno = false;
-        
+
+        // Setando atributos para pessoa juridica
         pessoa.setNome(textNome.getText().toUpperCase());
         pessoa.setEndereco(textEndereco.getText().toUpperCase());
         pessoa.setTelefone(textTelefone.getText());
         pessoa.setCnpj(textCNPJ.getText());
         pessoa.setInscricaoEstadual(textIE.getText());
-        
-        retorno = pessoa.Cadastra(pessoa);
-        
-        if(retorno){
+
+        // Se cadastrar corretamente        
+        if (pessoa.Cadastra(pessoa)) {
             if (JOptionPane.showConfirmDialog(null, "Pessoa jurídica cadastrada, inserir novamente?", "Aviso",
                     JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
                 limpaCampos();
             } else {
                 this.dispose();
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Houve algum problema, verifique.");
         }
-        
-        
+
     }//GEN-LAST:event_buttonCadastraActionPerformed
 
     private void textNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textNomeActionPerformed
-        // TODO add your handling code here:
         textEndereco.requestFocus();
     }//GEN-LAST:event_textNomeActionPerformed
 
     private void textEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textEnderecoActionPerformed
-        // TODO add your handling code here:
         textTelefone.requestFocus();
     }//GEN-LAST:event_textEnderecoActionPerformed
 
     private void textTelefoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textTelefoneActionPerformed
-        // TODO add your handling code here:
         textCNPJ.requestFocus();
     }//GEN-LAST:event_textTelefoneActionPerformed
 
     private void textCNPJActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textCNPJActionPerformed
-        // TODO add your handling code here:
         textIE.requestFocus();
     }//GEN-LAST:event_textCNPJActionPerformed
 
     private void textIEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textIEActionPerformed
-        // TODO add your handling code here:
         buttonCadastraActionPerformed(null);
     }//GEN-LAST:event_textIEActionPerformed
 
-    public void limpaCampos(){
+    public void limpaCampos() {
         textNome.setText(null);
         textCNPJ.setText(null);
         textIE.setText(null);
@@ -218,7 +211,7 @@ public class CadastraClienteJuridico extends javax.swing.JFrame {
         textTelefone.setText(null);
         textNome.requestFocus();
     }
-    
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {

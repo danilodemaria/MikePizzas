@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package modelos;
 
 import database.Conexao;
@@ -14,27 +9,27 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author mrx
- */
 public class Fisica extends Cliente {
 
     private String cpf;
     private String rg;
 
+    // Construtor
     public Fisica() {
 
     }
 
-    public Fisica(int id, String nome, String cpf, String rg, String endereco) {
+    // Construtor
+    public Fisica(int id, String nome, String cpf, String rg, String endereco, String telefone) {
         this.cpf = cpf;
         this.rg = rg;
         this.nome = nome;
         this.id = id;
         this.endereco = endereco;
+        this.telefone = telefone;
     }
 
+    // Método para cadastrar pessoa fisica
     public boolean Cadastra(Fisica pessoa) {
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
@@ -56,6 +51,7 @@ public class Fisica extends Cliente {
         }
     }
 
+    // Método para buscar todas pessoas fisicas ativas no banco de dados
     public static ArrayList<Fisica> buscaFisico() throws SQLException {
         ResultSet rs = null;
         PreparedStatement pst;
@@ -85,6 +81,7 @@ public class Fisica extends Cliente {
         return lista;
     }
 
+    // Método para remover uma pessoa fisica
     public static boolean remover(Fisica pessoa) {
         PreparedStatement pst;
         Connection conn = Conexao.Connect();
@@ -100,30 +97,18 @@ public class Fisica extends Cliente {
         }
     }
 
-    /**
-     * @return the cpf
-     */
     public String getCpf() {
         return cpf;
     }
 
-    /**
-     * @param cpf the cpf to set
-     */
     public void setCpf(String cpf) {
         this.cpf = cpf;
     }
 
-    /**
-     * @return the rg
-     */
     public String getRg() {
         return rg;
     }
 
-    /**
-     * @param rg the rg to set
-     */
     public void setRg(String rg) {
         this.rg = rg;
     }

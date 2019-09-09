@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
+// Configuração das informaçoes de acesso ao banco de dados postgresql
 public class Conexao {
     public static Connection Connect() {
         String url = "jdbc:postgresql://localhost:5432/db_pizzaria";

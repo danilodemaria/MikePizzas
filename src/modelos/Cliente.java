@@ -1,4 +1,3 @@
-
 package modelos;
 
 public class Cliente {
@@ -9,74 +8,58 @@ public class Cliente {
     public String telefone;
     private boolean ativo;
 
-    /**
-     * @return the id
-     */
+    // Construtor
+    public Cliente() {
+
+    }
+
+    // Construtor
+    public Cliente(int id, String nome, String endereco, String telefone, boolean ativo) {
+        this.id = id;
+        this.nome = nome;
+        this.endereco = endereco;
+        this.telefone = telefone;
+        this.ativo = ativo;
+    }
+
     public int getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
     public void setId(int id) {
         this.id = id;
     }
 
-    /**
-     * @return the nome
-     */
     public String getNome() {
         return nome;
     }
 
-    /**
-     * @param nome the nome to set
-     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    /**
-     * @return the endereco
-     */
     public String getEndereco() {
         return endereco;
     }
 
-    /**
-     * @param endereco the endereco to set
-     */
     public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
-    
-    /**
-     * @return the telefone
-     */
+
     public String getTelefone() {
         return telefone;
     }
 
-    /**
-     * @param telefone the telefone to set
-     */
     public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
-    
-      /**
-     * @return the ativo
-     */
+
     public boolean isAtivo() {
         return ativo;
     }
 
-    /**
-     * @param ativo the ativo to set
-     */
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
-    
+
 }
